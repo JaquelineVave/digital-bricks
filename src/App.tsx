@@ -7,7 +7,7 @@ import './App.css'
 
 function App() {
   const [heldId, setHeldId] = useState<string | null>(null)
-  const [selectedColor, setSelectedColor] = useState(DEFAULT_PIECE_COLOR)
+  const [selectedColor, setSelectedColor] = useState<string>(DEFAULT_PIECE_COLOR)
 
   const heldDefinition = useMemo(() => {
     const definition = heldId ? getBrickDefinition(heldId) : null
@@ -25,7 +25,7 @@ function App() {
         selectedId={heldId}
         selectedColor={selectedColor}
         onSelect={handleSelect}
-        onColorChange={setSelectedColor}
+        onColorChange={(color) => setSelectedColor(color)}
       />
       <Scene heldDefinition={heldDefinition} onHoldChange={setHeldId} />
       <p className="hint">
