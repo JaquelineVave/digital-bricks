@@ -96,6 +96,20 @@ function otherBrickId(connection: BrickConnection, brickId: string) {
   return connection.brickAId === brickId ? connection.brickBId : connection.brickAId
 }
 
+function connectionStillFits(a: Brick, b: Brick, connection: BrickConnection) {
+  const from = a.connectors.find((connector) => connector.id === connection.connectorAId)
+  const to = b.connectors.find((connector) => connector.id === connection.connectorBId)
+  if (!from || !to || !areConnectorsCompatible(from, to)) return false
+
+  getConnectorWorldDirection(a.object.quaternion, from, _fromDir)
+  getConnectorWorldDirection(b.object.quaternion, to, _toDir)
+  if (_fromDir.dot(_toDir) > DIRECTION_OPPOSITE_DOT) return false
+
+  getConnectorWorldPosition(a.object.position, a.object.quaternion, from, _fromWorld)
+  getConnectorWorldPosition(b.object.position, b.object.quaternion, to, _toWorld)
+  return _fromWorld.distanceTo(_toWorld) <= CONNECTOR_OCCUPIED_DISTANCE
+}
+
 export class ConnectionGraph {
   private connections = new Map<string, BrickConnection>()
   private byBrick = new Map<string, BrickConnection[]>()
@@ -132,6 +146,18 @@ export class ConnectionGraph {
   /** Detach one brick; other bricks keep any connections they still have to each other. */
   removeConnectionsFor(brickId: string) {
     this.linksFor(brickId).forEach((connection) => this.remove(connection.id))
+  }
+
+  /** Drop links that no longer meet after a piece is rotated in place. */
+  pruneInvalidFor(brickId: string, bricks: Brick[]) {
+    const byId = new Map(bricks.map((brick) => [brick.id, brick]))
+    this.linksFor(brickId).forEach((connection) => {
+      const a = byId.get(connection.brickAId)
+      const b = byId.get(connection.brickBId)
+      if (!a || !b || !connectionStillFits(a, b, connection)) {
+        this.remove(connection.id)
+      }
+    })
   }
 
   seedAligned(bricks: Brick[]) {

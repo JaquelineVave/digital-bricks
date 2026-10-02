@@ -46,12 +46,48 @@ function setPointerFromEvent(
 }
 
 function clampToPlate(brick: Brick, x: number, z: number) {
-  const width = brick.widthUnits * UNIT
-  const depth = brick.depthUnits * UNIT
+  const { width, depth } = brickFootprint(brick)
   const half = (PLATE_SIZE * UNIT) / 2
   return {
     x: THREE.MathUtils.clamp(x, -half + width / 2, half - width / 2),
     z: THREE.MathUtils.clamp(z, -half + depth / 2, half - depth / 2),
+  }
+}
+
+function clampGroupToPlate(members: Brick[]) {
+  if (members.length === 0) return
+  const half = (PLATE_SIZE * UNIT) / 2
+  let minX = Infinity
+  let maxX = -Infinity
+  let minZ = Infinity
+  let maxZ = -Infinity
+  for (const brick of members) {
+    const { width, depth } = brickFootprint(brick)
+    minX = Math.min(minX, brick.object.position.x - width / 2)
+    maxX = Math.max(maxX, brick.object.position.x + width / 2)
+    minZ = Math.min(minZ, brick.object.position.z - depth / 2)
+    maxZ = Math.max(maxZ, brick.object.position.z + depth / 2)
+  }
+  let shiftX = 0
+  let shiftZ = 0
+  if (minX < -half) shiftX = -half - minX
+  else if (maxX > half) shiftX = half - maxX
+  if (minZ < -half) shiftZ = -half - minZ
+  else if (maxZ > half) shiftZ = half - maxZ
+  if (shiftX === 0 && shiftZ === 0) return
+  for (const brick of members) {
+    brick.object.position.x += shiftX
+    brick.object.position.z += shiftZ
+  }
+}
+
+function brickFootprint(brick: Brick) {
+  const yaw = new THREE.Euler().setFromQuaternion(brick.object.quaternion, 'YXZ').y
+  const quarter = ((Math.round(yaw / (Math.PI / 2)) % 4) + 4) % 4
+  const swapped = quarter % 2 === 1
+  return {
+    width: (swapped ? brick.depthUnits : brick.widthUnits) * UNIT,
+    depth: (swapped ? brick.widthUnits : brick.depthUnits) * UNIT,
   }
 }
 
@@ -62,10 +98,12 @@ function footprintsOverlap(
   b: Brick,
   padding = 0,
 ) {
-  const aHalfW = (a.widthUnits * UNIT) / 2 + padding
-  const aHalfD = (a.depthUnits * UNIT) / 2 + padding
-  const bHalfW = (b.widthUnits * UNIT) / 2 + padding
-  const bHalfD = (b.depthUnits * UNIT) / 2 + padding
+  const aSize = brickFootprint(a)
+  const bSize = brickFootprint(b)
+  const aHalfW = aSize.width / 2 + padding
+  const aHalfD = aSize.depth / 2 + padding
+  const bHalfW = bSize.width / 2 + padding
+  const bHalfD = bSize.depth / 2 + padding
   const overlapX =
     Math.min(aX + aHalfW, b.object.position.x + bHalfW) -
     Math.max(aX - aHalfW, b.object.position.x - bHalfW)
@@ -443,9 +481,11 @@ export function Scene({ heldDefinition = null, onHoldChange }: SceneProps) {
 
     const startPlacing = (definition: BrickDefinition) => {
       if (draggedBrick) return
+      const keptRotation = heldBrick?.object.quaternion.clone() ?? null
       selectedBrick = null
       discardHeldBrick()
       const brick = createBrickFromDefinition(definition)
+      if (keptRotation) brick.object.quaternion.copy(keptRotation)
       brick.object.position.set(0, PLATE_THICKNESS + brick.height / 2, 0)
       setBrickPreview(brick, true)
       scene.add(brick.object)
@@ -562,9 +602,44 @@ export function Scene({ heldDefinition = null, onHoldChange }: SceneProps) {
       onPointerMove(event)
     }
 
+    const rotateSelectedBrick = () => {
+      if (draggedBrick) return
+
+      if (heldBrick) {
+        heldBrick.object.rotateY(Math.PI / 2)
+        movingBricks = [heldBrick]
+        movingPoses = snapshotRigidPoses(heldBrick, movingBricks)
+        if (lastPointer) applyDrag(lastPointer)
+        else {
+          const clamped = clampToPlate(
+            heldBrick,
+            heldBrick.object.position.x,
+            heldBrick.object.position.z,
+          )
+          heldBrick.object.position.x = clamped.x
+          heldBrick.object.position.z = clamped.z
+        }
+        return
+      }
+
+      const brick = selectedBrick
+      if (!brick?.draggable) return
+      const groupIds = connectionGraph.getConnectedComponent(brick.id)
+      const members = movableBricks.filter((member) => groupIds.has(member.id))
+      const poses = snapshotRigidPoses(brick, members)
+      brick.object.rotateY(Math.PI / 2)
+      applyRigidPoses(brick, members, poses)
+      clampGroupToPlate(members)
+    }
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         cancelPlacing()
+        return
+      }
+      if (event.code === 'KeyR' && !event.repeat) {
+        event.preventDefault()
+        rotateSelectedBrick()
         return
       }
       if (event.key !== 'Delete' && event.key !== 'Backspace') return

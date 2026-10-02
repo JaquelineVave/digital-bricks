@@ -29,8 +29,8 @@ function App() {
       />
       <Scene heldDefinition={heldDefinition} onHoldChange={setHeldId} />
       <p className="hint">
-        Choose a piece to place · Drag placed bricks · Click a placed piece, then Delete · Shift-drag to
-        unsnap · Drag empty space to look around
+        Choose a piece to place · R to rotate · Drag placed bricks · Click a placed piece, then Delete ·
+        Shift-drag to unsnap · Drag empty space to look around
       </p>
     </main>
   )
