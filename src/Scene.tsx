@@ -176,7 +176,7 @@ export function Scene({ heldDefinition = null, onHoldChange }: SceneProps) {
     if (!container) return
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color('#dce8f2')
+    scene.background = new THREE.Color('#dae8e8')
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -207,11 +207,11 @@ export function Scene({ heldDefinition = null, onHoldChange }: SceneProps) {
     sun.shadow.mapSize.set(1024, 1024)
     scene.add(sun)
 
-    const fill = new THREE.DirectionalLight('#c9ddff', 0.35)
+    const fill = new THREE.DirectionalLight('#73c1f2', 0.35)
     fill.position.set(-10, 8, -6)
     scene.add(fill)
 
-    const plate = createPlate(PLATE_SIZE, PLATE_THICKNESS, '#2f9e44')
+    const plate = createPlate(PLATE_SIZE, PLATE_THICKNESS, '#c0d904')
     scene.add(plate.object)
 
     const movableBricks: Brick[] = []

@@ -21,7 +21,7 @@ export function createSnapIndicator() {
 
   const disc = new THREE.Mesh(
     new THREE.CircleGeometry(0.55, 32),
-    makeMaterial('#38bdf8', 0.35),
+    makeMaterial('#73c1f2', 0.35),
   )
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(0.42, 0.62, 40),
@@ -29,7 +29,7 @@ export function createSnapIndicator() {
   )
   const inner = new THREE.Mesh(
     new THREE.RingGeometry(0.22, 0.34, 32),
-    makeMaterial('#7dd3fc', 0.9),
+    makeMaterial('#73c1f2', 0.9),
   )
 
   // Geometry lies in XY. Lay it flat on XZ so it reads as a ring on the brick.

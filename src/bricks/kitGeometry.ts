@@ -44,8 +44,8 @@ export function addDoorVisual(object: THREE.Group, definition: BrickDefinition) 
   const bottom = -definition.height / 2
   const top = definition.height / 2
   const wood = mat(definition.color, 0.48)
-  const frame = mat(mix(definition.color, '#f8f9fa', 0.45), 0.4)
-  const handle = mat(mix(definition.color, '#212529', 0.35), 0.3)
+  const frame = mat(mix(definition.color, '#dae8e8', 0.45), 0.4)
+  const handle = mat(mix(definition.color, '#101820', 0.35), 0.3)
 
   const frameDepth = definition.depthUnits * UNIT * 0.92
   mesh(object, new THREE.BoxGeometry(0.18, definition.height, frameDepth), frame, -0.91, 0, 0)
@@ -58,7 +58,7 @@ export function addDoorVisual(object: THREE.Group, definition: BrickDefinition) 
 
 export function addWindowVisual(object: THREE.Group, definition: BrickDefinition) {
   const frame = mat(definition.color, 0.38)
-  const pane = mat('#a5d8ff', 0.18, { transparent: true, opacity: 0.45 })
+  const pane = mat('#73c1f2', 0.18, { transparent: true, opacity: 0.45 })
   const depth = definition.depthUnits * UNIT * 0.55
 
   mesh(object, new THREE.BoxGeometry(2, 0.16, depth), frame, 0, definition.height / 2 - 0.08, 0)
@@ -76,8 +76,8 @@ export function addWindowVisual(object: THREE.Group, definition: BrickDefinition
 function addFigure(object: THREE.Group, definition: BrickDefinition, bottom: number) {
   const skin = mat('#f3d1b0', 0.52)
   const shirt = mat(definition.color, 0.38)
-  const pants = mat('#343a40', 0.48)
-  const shoes = mat('#212529', 0.4)
+  const pants = mat('#101820', 0.48)
+  const shoes = mat('#101820', 0.4)
 
   mesh(object, new THREE.CylinderGeometry(0.09, 0.1, 0.16, 8), shoes, -0.13, bottom + 0.08, 0.02)
   mesh(object, new THREE.CylinderGeometry(0.09, 0.1, 0.16, 8), shoes, 0.13, bottom + 0.08, 0.02)
@@ -116,22 +116,22 @@ function addFigure(object: THREE.Group, definition: BrickDefinition, bottom: num
 }
 
 function addTree(object: THREE.Group, color: string, bottom: number) {
-  const bark = mat(mix(color, '#212529', 0.45), 0.72)
+  const bark = mat(mix(color, '#101820', 0.45), 0.72)
   mesh(object, new THREE.CylinderGeometry(0.11, 0.18, 0.9, 8), bark, 0, bottom + 0.45, 0)
-  const lower = mesh(object, new THREE.ConeGeometry(0.95, 1.15, 7), mat(mix(color, '#212529', 0.18), 0.55), 0.04, bottom + 1.28, -0.04)
+  const lower = mesh(object, new THREE.ConeGeometry(0.95, 1.15, 7), mat(mix(color, '#101820', 0.18), 0.55), 0.04, bottom + 1.28, -0.04)
   lower.rotation.y = 0.3
   const middle = mesh(object, new THREE.ConeGeometry(0.72, 1.0, 7), mat(color, 0.5), -0.06, bottom + 1.85, 0.05)
   middle.rotation.y = 0.7
-  mesh(object, new THREE.ConeGeometry(0.48, 0.82, 7), mat(mix(color, '#f8f9fa', 0.22), 0.48), 0.05, bottom + 2.42, -0.03)
+  mesh(object, new THREE.ConeGeometry(0.48, 0.82, 7), mat(mix(color, '#dae8e8', 0.22), 0.48), 0.05, bottom + 2.42, -0.03)
 }
 
 function addFlower(object: THREE.Group, color: string, bottom: number) {
-  mesh(object, new THREE.CylinderGeometry(0.08, 0.11, 2.15, 8), mat(mix(color, '#2f9e44', 0.55), 0.5), 0, bottom + 1.08, 0)
+  mesh(object, new THREE.CylinderGeometry(0.08, 0.11, 2.15, 8), mat(mix(color, '#c0d904', 0.55), 0.5), 0, bottom + 1.08, 0)
 
-  const leafA = mesh(object, new THREE.SphereGeometry(0.42, 8, 6), mat(mix(color, '#2f9e44', 0.4), 0.45), 0.42, bottom + 0.72, 0.06)
+  const leafA = mesh(object, new THREE.SphereGeometry(0.42, 8, 6), mat(mix(color, '#c0d904', 0.4), 0.45), 0.42, bottom + 0.72, 0.06)
   leafA.scale.set(1.55, 0.22, 0.8)
   leafA.rotation.z = -0.45
-  const leafB = mesh(object, new THREE.SphereGeometry(0.36, 8, 6), mat(mix(color, '#2f9e44', 0.28), 0.45), -0.38, bottom + 0.95, -0.08)
+  const leafB = mesh(object, new THREE.SphereGeometry(0.36, 8, 6), mat(mix(color, '#c0d904', 0.28), 0.45), -0.38, bottom + 0.95, -0.08)
   leafB.scale.set(1.45, 0.2, 0.75)
   leafB.rotation.z = 0.5
 
@@ -149,17 +149,17 @@ function addFlower(object: THREE.Group, color: string, bottom: number) {
     petal.scale.set(0.8, 0.32, 1.25)
     petal.lookAt(0, bloomY, 0)
   }
-  mesh(object, new THREE.SphereGeometry(0.28, 12, 10), mat(mix(color, '#ffe066', 0.55), 0.32), 0, bloomY + 0.06, 0)
+  mesh(object, new THREE.SphereGeometry(0.28, 12, 10), mat(mix(color, '#f2cc29', 0.55), 0.32), 0, bloomY + 0.06, 0)
 }
 
 function addFlag(object: THREE.Group, color: string, bottom: number) {
-  const metal = mat('#868e96', 0.32)
+  const metal = mat('#101820', 0.32)
   mesh(object, new THREE.CylinderGeometry(0.12, 0.16, 0.16, 10), metal, 0, bottom + 0.08, 0)
   mesh(object, new THREE.CylinderGeometry(0.055, 0.07, 4.3, 10), metal, 0, bottom + 2.23, 0)
   mesh(object, new THREE.SphereGeometry(0.1, 10, 8), metal, 0, bottom + 4.42, 0)
 
   const banner = mesh(object, new THREE.BoxGeometry(1.9, 1.1, 0.08), mat(color, 0.38), 1.02, bottom + 3.55, 0)
   banner.rotation.y = -0.1
-  const tip = mesh(object, new THREE.BoxGeometry(0.34, 1.1, 0.08), mat(mix(color, '#212529', 0.22), 0.4), 1.98, bottom + 3.55, -0.08)
+  const tip = mesh(object, new THREE.BoxGeometry(0.34, 1.1, 0.08), mat(mix(color, '#101820', 0.22), 0.4), 1.98, bottom + 3.55, -0.08)
   tip.rotation.y = -0.16
 }

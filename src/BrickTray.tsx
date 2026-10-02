@@ -23,7 +23,11 @@ export function BrickTray({
 
   return (
     <aside className="tray" aria-label="Piece library">
-      <p className="tray-title">Pieces</p>
+      <div className="tray-brand">
+        <img className="tray-logo" src="/atw-logo.png" alt="Around the Work" />
+        <p className="tray-brand-name">Around the Work</p>
+        <p className="tray-title">Digital Bricks</p>
+      </div>
       <div className="tray-cats">
         {PIECE_CATEGORIES.map((entry) => (
           <button

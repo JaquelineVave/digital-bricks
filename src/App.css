@@ -21,14 +21,15 @@
 
 .hint {
   position: absolute;
-  left: calc(50% + 76px);
+  left: calc(50% + 84px);
   bottom: 24px;
   margin: 0;
   padding: 8px 14px;
   transform: translateX(-50%);
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.72);
-  color: #f8fafc;
+  background: rgba(16, 24, 32, 0.92);
+  color: #dae8e8;
+  border: 1px solid #682ef4;
   font-size: 14px;
   letter-spacing: 0.2px;
   pointer-events: none;
@@ -41,14 +42,44 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  flex: 0 0 152px;
+  flex: 0 0 168px;
   gap: 8px;
   height: 100%;
-  padding: 14px 10px 12px;
+  padding: 16px 12px 12px;
   border-radius: 0;
-  background: rgba(15, 23, 42, 0.9);
-  color: #f8fafc;
+  background: #101820;
+  color: #dae8e8;
   pointer-events: auto;
+  border-right: 1px solid #682ef4;
+}
+
+.tray-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 10px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid rgba(104, 46, 244, 0.45);
+}
+
+.tray-logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  background: #000;
+  border-radius: 12px;
+}
+
+.tray-brand-name {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #682ef4;
+  text-align: center;
 }
 
 .tray-title {
@@ -57,7 +88,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #cbd5e1;
+  color: #dae8e8;
 }
 
 .tray-cats {
@@ -72,7 +103,7 @@
   border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
-  color: #cbd5e1;
+  color: #dae8e8;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -88,7 +119,7 @@
 }
 
 .tray-cat.selected {
-  border-color: #7dd3fc;
+  border-color: #682ef4;
 }
 
 .tray-list {
@@ -119,7 +150,7 @@
 }
 
 .tray-item.selected {
-  border-color: #7dd3fc;
+  border-color: #682ef4;
 }
 
 .tray-swatch {
@@ -154,7 +185,7 @@
 
 .tray-colors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   padding: 4px 2px 8px;
 }
@@ -164,13 +195,13 @@
   height: 18px;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(218, 232, 232, 0.45);
   border-radius: 4px;
   cursor: pointer;
 }
 
 .tray-color.selected {
-  outline: 2px solid #7dd3fc;
+  outline: 2px solid #682ef4;
   outline-offset: 1px;
 }
 
